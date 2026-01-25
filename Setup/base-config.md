@@ -228,10 +228,143 @@ Audio should work automatically with xrdp-pulseaudio-installer, but if not:
 sudo apt-get install pulseaudio
 ```
 
+## Adding Additional RDP Users
+
+### Using Script
+
+```bash
+# Make script executable
+chmod +x add-rdp-user.sh
+
+# Add a new user
+./add-rdp-user.sh david coolman
+```
+
+### Manual Method
+
+```bash
+# Create user with home directory
+sudo adduser --disabled-password --gecos "" david
+
+# Set password
+echo "david:coolman" | sudo chpasswd
+
+# Verify user creation
+id david
+```
+
+The new user can now login via RDP using their credentials.
+
+## WiFi Configuration
+
+### Automated WiFi Setup
+
+```bash
+# Make script executable
+chmod +x setup-wifi.sh
+
+# Connect to WiFi (replace with your SSID and password)
+./setup-wifi.sh "Sighthounds" "alexander-wifi"
+```
+
+### Manual WiFi Configuration
+
+Using NetworkManager (recommended for Raspberry Pi OS with Desktop):
+
+```bash
+# Set WiFi country code (adjust as needed: US, GB, DE, AT, etc.)
+sudo raspi-config nonint do_wifi_country AT
+
+# Bring WiFi interface up
+sudo ip link set wlan0 up
+
+# Connect to WiFi network
+sudo nmcli device wifi connect "YourSSID" password "YourPassword"
+
+# Check connection status
+nmcli device status
+iwconfig wlan0
+ifconfig wlan0 | grep inet
+```
+
+### Verify WiFi Connection
+
+```bash
+# Check WiFi details
+iwconfig wlan0
+
+# Check IP address
+ifconfig wlan0
+
+# Test internet connectivity
+ping -c 4 google.com
+```
+
+### Get Current WiFi IP Address
+
+```bash
+# Get WiFi IP
+hostname -I | awk '{print $2}'
+
+# Or more detailed
+ifconfig wlan0 | grep "inet " | awk '{print $2}'
+```
+
+## Remote Access via Port Forwarding
+
+To access your Raspberry Pi from outside your local network:
+
+### Port Forwarding Setup
+
+Configure your router to forward traffic:
+
+- **Service Name**: RaspberryPi-RDP
+- **External Port**: 33389 (or any custom port for security)
+- **Internal IP**: 192.168.0.143 (or your Raspberry Pi's IP)
+- **Internal Port**: 3389
+- **Protocol**: TCP
+
+### Security Recommendations
+
+1. **Use Non-Standard Port**: Forward external port 33389 to internal port 3389
+2. **Strong Passwords**: Always use strong, unique passwords
+3. **VPN Preferred**: Consider setting up VPN instead of exposing RDP directly
+4. **Firewall Rules**: Enable and configure firewall:
+   ```bash
+   sudo apt-get install ufw
+   sudo ufw allow ssh
+   sudo ufw allow 3389/tcp
+   sudo ufw enable
+   ```
+
+### Connect from External Network
+
+```cmd
+# Using custom external port
+mstsc /v:your-public-ip:33389
+
+# Using default port (less secure)
+mstsc /v:your-public-ip:3389
+```
+
+### Find Your Public IP
+
+From Raspberry Pi:
+
+```bash
+curl ifconfig.me
+# or
+curl icanhazip.com
+```
+
 ## System Information
 
 - **Hostname**: raspi4
-- **Default User**: alex
+- **Users**: alex (admin), david
 - **Desktop Environment**: XFCE4
 - **RDP Server**: xRDP
-- **RDP Port**: 3389
+- **RDP Port**: 3389 (internal)
+- **Network Manager**: NetworkManager
+- **WiFi SSID**: Sighthounds
+- **WiFi IP**: 192.168.0.235
+- **Ethernet IP**: 192.168.0.143

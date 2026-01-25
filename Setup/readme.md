@@ -74,6 +74,28 @@ ifconfig
 
 ![check-ip](_images/check-ip.png)
 
+## WiFi Configuration
+
+### Quick WiFi Setup
+
+Use the automated script or run this command:
+
+```bash
+# Using script
+chmod +x setup-wifi.sh
+./setup-wifi.sh "YourSSID" "YourPassword"
+
+# Or manual command
+sudo nmcli device wifi connect "YourSSID" password "YourPassword"
+```
+
+Verify connection:
+
+```bash
+iwconfig wlan0
+ifconfig wlan0
+```
+
 ## Enable RDP access
 
 ### Quick Setup (Copy-Paste Method)
@@ -124,6 +146,40 @@ mstsc /v:192.168.0.143
 ![rdp-finish](_images/rdp-finish.png)
 
 > For detailed configuration, troubleshooting, and security considerations, see [base-config.md](base-config.md)
+
+## Add Additional RDP Users
+
+Use the script to add more users who can connect via RDP:
+
+```bash
+chmod +x add-rdp-user.sh
+./add-rdp-user.sh username password
+```
+
+Example:
+
+```bash
+./add-rdp-user.sh david coolman
+```
+
+## Remote Access (Port Forwarding)
+
+To access your Raspberry Pi from outside your local network:
+
+**Router Configuration:**
+
+- External Port: 33389 (custom for security)
+- Internal IP: Your Raspberry Pi's IP (e.g., 192.168.0.143 or 192.168.0.235)
+- Internal Port: 3389
+- Protocol: TCP
+
+**Connect from outside:**
+
+```
+mstsc /v:your-public-ip:33389
+```
+
+⚠️ **Security Warning**: Use strong passwords and consider VPN for production environments.
 
 ## Optional - IP Address Management
 
