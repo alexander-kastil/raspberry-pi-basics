@@ -8,7 +8,9 @@ Download Raspberry Imager:
 
 Take the SD Card of the Raspberry, you might have to use an adapter, and plug it into a local USB Card Reader.
 
-Run the Raspberry Pi Imager.
+Run the Raspberry Pi Imager. Remember **`<user>`**, **`<hostname>`**, **`<password>`** you might need them later.
+
+⚠️ **Important**: Save your credentials securely - you will need them later for SSH access and configuration.
 
 Then choose Operating System (OS) Image & Card
 
@@ -37,7 +39,7 @@ Install the SSH Client [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putt
 Connect to the Raspberry using Windows Command Shell (Windows + R -> CMD)
 
 ```bash
-ssh pi@raspberrypi
+ssh <user>@<hostname>
 ```
 
 > Note: The default password is "raspberry"
@@ -49,36 +51,6 @@ sudo  raspi-config
 ```
 
 > Note: To install Ubuntu Server on the raspi follow this [guide](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview)
-
-### Connect to the WiFi
-
-Connect the Raspberry to your local wifi - you will need your Network SSID and the password:
-
-![wifi-1](_images/wifi-1.png)
-
-![wifi-2](_images/wifi-2.png)
-
-> Connect to your WiFi Network using your SSID & password
-
-Update the Raspberry to check if Network Config works:
-
-![update](_images/update.png)
-
-You should see a screen similar to this:
-
-![updating](_images/updating.png)
-
-> Note: In real life you should also change the device name & sudo password
-
-After you finished this configuration choose `finish` to exit the `raspi-config` screen.
-
-Next check your IP Address:
-
-```
-ifconfig
-```
-
-![check-ip](_images/check-ip.png)
 
 ## WiFi Configuration
 
