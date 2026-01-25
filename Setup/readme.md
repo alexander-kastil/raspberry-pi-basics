@@ -46,7 +46,7 @@ sudo  raspi-config
 
 ### Connect to the WiFi
 
-Connect the raspi to your local wifi - you will need your Network SSID and the password:
+Connect the Raspberry to your local wifi - you will need your Network SSID and the password:
 
 ![wifi-1](_images/wifi-1.png)
 
@@ -54,7 +54,7 @@ Connect the raspi to your local wifi - you will need your Network SSID and the p
 
 > Connect to your WiFi Network using your SSID & password
 
-Update the raspi to check if Network Config works:
+Update the Raspberry to check if Network Config works:
 
 ![update](_images/update.png)
 
@@ -76,24 +76,54 @@ ifconfig
 
 ## Enable RDP access
 
-Install RDP on raspi:
+### Quick Setup (Copy-Paste Method)
+
+Copy and paste this entire block into your SSH session:
+
+```bash
+sudo apt-get update && \
+sudo apt-get upgrade -y && \
+sudo apt-get install -y xfce4 xfce4-goodies xrdp xrdp-pulseaudio-installer && \
+sudo addgroup xrdp ssl-cert && \
+sudo bash -c 'cat > /etc/xrdp/startwm.sh << "EOF"
+#!/bin/sh
+unset DBUS_SESSION_BUS_ADDRESS
+unset XDG_RUNTIME_DIR
+test -f /etc/profile && . /etc/profile
+test -f $HOME/.profile && . $HOME/.profile
+exec startxfce4
+EOF' && \
+sudo chmod +x /etc/xrdp/startwm.sh && \
+sudo systemctl enable xrdp && \
+sudo systemctl restart xrdp && \
+echo "RDP setup complete! Connect using: mstsc /v:$(hostname -I | awk '{print $1}')"
+```
+
+### Script-Based Setup
+
+Alternatively, use the automated setup script:
+
+```bash
+# Copy setup-rdp.sh to your Raspberry Pi, then:
+chmod +x setup-rdp.sh
+./setup-rdp.sh
+```
+
+### Connect from Windows
+
+Open Remote Desktop Connection and connect:
 
 ```
-sudo apt-get update
-sudo apt-get install xrdp
-```
-
-Connect to raspi from your Windows Client:
-
-```
- mstsc /v:192.168.1.140
+mstsc /v:192.168.0.143
 ```
 
 ![rdp-logon](_images/rdp-logon.png)
 
-> Note: Logon using your credentials
+> Note: Login with your Raspberry Pi credentials (username: alex)
 
 ![rdp-finish](_images/rdp-finish.png)
+
+> For detailed configuration, troubleshooting, and security considerations, see [base-config.md](base-config.md)
 
 ## Optional - IP Address Management
 
