@@ -6,11 +6,17 @@ Download Raspberry Imager:
 
 [Imager for Windows](https://downloads.raspberrypi.org/imager/imager.exe)
 
+Take the SD Card of the Raspberry, you might have to use an adapter, and plug it into a local USB Card Reader.
+
+Run the Raspberry Pi Imager.
+
 Then choose Operating System (OS) Image & Card
 
 ![format-sdcard](_images/format-sdcard.png)
 
 ![choose-os](_images/choose-os.png)
+
+> Note: Screensshots might differ depending on the version of the Imager
 
 ---
 
