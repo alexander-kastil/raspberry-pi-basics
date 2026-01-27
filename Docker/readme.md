@@ -1,35 +1,41 @@
-# Docker
+# Docker on Raspberry Pi
 
-[Guide](https://lobehub.com/mcp/lawiak-docker-mcp-raspi)
+[Docker MCP Server Setup for Raspberry Pi](https://github.com/Lawiak/docker-mcp-raspi)
 
-## Install Docker
+## Installation
 
-Set your system to the latest state:
+Update system:
 
-```
-sudo apt-get update && sudo apt-get upgrade
-```
-
-> Note: Choose yes if prompted
-
-Download Docker installation script & execute it:
-
-```
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
+```bash
+sudo apt-get update
+sudo apt-get upgrade -y
 ```
 
-Add the Pi user to the Docker Group:
+Download and install Docker:
 
+```bash
+curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+sudo sh /tmp/get-docker.sh
 ```
-sudo usermod -aG docker pi
+
+Add user to docker group (replace `<username>`):
+
+```bash
+sudo usermod -aG docker <username>
+sudo reboot
 ```
 
-> Note: If you want to add any other (non-root) user to the Docker Group execute: `sudo usermod -aG docker [user_name]`
+## Verify Installation
 
-Check Docker version & test installation:
+Check versions:
 
+```bash
+docker --version
+docker compose version
 ```
-docker version
-sudo docker run hello-world
+
+Test with hello-world:
+
+```bash
+docker run hello-world
 ```
