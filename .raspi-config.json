@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Configuration file for Raspberry Pi SSH connections. Copy this to .raspi-config.json and fill in your actual values.",
+  "devices": {
+    "main-pi": {
+      "name": "raspi4",
+      "host": "192.168.0.143",
+      "port": 22,
+      "username": "alex",
+      "description": "Primary development Raspberry Pi 4",
+      "defaultPath": "/home/pi"
+    }
+  },
+  "defaults": {
+    "device": "main-pi",
+    "timeout": 30
+  },
+  "notes": [
+    "Never commit .raspi-config.json to version control if it contains sensitive data",
+    "Add .raspi-config.json to your .gitignore file",
+    "SSH keys should be configured separately in your SSH config (~/.ssh/config)",
+    "Use SSH key authentication instead of passwords when possible"
+  ]
+}
