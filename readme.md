@@ -1,6 +1,6 @@
 # Raspberry Pi for Beginners
 
-This introduction was initially created for David the Coolman to learn setting up a Minecraft Game Server during the first lockdown of the covid-19 pseudo pandemic. It was then extended with other topics that came up.
+This introduction was initially created for David the Coolman to learn setting up a Minecraft Game Server during the first lockdown of the covid-19 pseudo plandemic. It was then extended with other topics that came up.
 
 ---
 
