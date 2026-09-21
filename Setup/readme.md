@@ -2,9 +2,7 @@
 
 Download Raspberry Imager:
 
-[Raspberry Downloads](https://www.raspberrypi.org/downloads/)
-
-[Imager for Windows](https://downloads.raspberrypi.org/imager/imager.exe)
+[Raspberry Downloads](https://www.raspberrypi.com/software/)
 
 Take the SD Card of the Raspberry, you might have to use an adapter, and plug it into a local USB Card Reader.
 
