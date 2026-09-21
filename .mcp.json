@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "secrets-mcp": {
+      "type": "http",
+      "url": "https://store.integrations.at/mcp",
+      "headers": {
+        "X-API-Key": "secmcp_13fb1c6a780690ceacdd57bc37306070af019e4a68e4745c"
+      }
+    },
+    "worktime-mcp": {
+      "type": "http",
+      "url": "https://worktime-mcp.integrations.at/mcp",
+      "headers": {
+        "X-API-Key": "${WORKTIME_MCP_KEY}"
+      }
+    }
+  }
+}

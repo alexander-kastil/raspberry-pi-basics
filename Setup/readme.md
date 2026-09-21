@@ -2,15 +2,21 @@
 
 Download Raspberry Imager:
 
-[Raspberry Downloads](https://www.raspberrypi.org/downloads/)
+[Raspberry Downloads](https://www.raspberrypi.com/software/)
 
-[Imager for Windows](https://downloads.raspberrypi.org/imager/imager.exe)
+Take the SD Card of the Raspberry, you might have to use an adapter, and plug it into a local USB Card Reader.
+
+Run the Raspberry Pi Imager. Remember **`<user>`**, **`<hostname>`**, **`<password>`** you might need them later.
+
+⚠️ **Important**: Save your credentials securely - you will need them later for SSH access and configuration.
 
 Then choose Operating System (OS) Image & Card
 
 ![format-sdcard](_images/format-sdcard.png)
 
 ![choose-os](_images/choose-os.png)
+
+> Note: Screensshots might differ depending on the version of the Imager
 
 ---
 
@@ -31,7 +37,7 @@ Install the SSH Client [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putt
 Connect to the Raspberry using Windows Command Shell (Windows + R -> CMD)
 
 ```bash
-ssh pi@raspberrypi
+ssh <user>@<hostname>
 ```
 
 > Note: The default password is "raspberry"
@@ -44,56 +50,112 @@ sudo  raspi-config
 
 > Note: To install Ubuntu Server on the raspi follow this [guide](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview)
 
-### Connect to the WiFi
+## WiFi Configuration
 
-Connect the raspi to your local wifi - you will need your Network SSID and the password:
+### Quick WiFi Setup
 
-![wifi-1](_images/wifi-1.png)
+Use the automated script or run this command:
 
-![wifi-2](_images/wifi-2.png)
+```bash
+# Using script
+chmod +x setup-wifi.sh
+./setup-wifi.sh "YourSSID" "YourPassword"
 
-> Connect to your WiFi Network using your SSID & password
-
-Update the raspi to check if Network Config works:
-
-![update](_images/update.png)
-
-You should see a screen similar to this:
-
-![updating](_images/updating.png)
-
-> Note: In real life you should also change the device name & sudo password
-
-After you finished this configuration choose `finish` to exit the `raspi-config` screen.
-
-Next check your IP Address:
-
-```
-ifconfig
+# Or manual command
+sudo nmcli device wifi connect "YourSSID" password "YourPassword"
 ```
 
-![check-ip](_images/check-ip.png)
+Verify connection:
+
+```bash
+iwconfig wlan0
+ifconfig wlan0
+```
 
 ## Enable RDP access
 
-Install RDP on raspi:
+### Quick Setup (Copy-Paste Method)
+
+Copy and paste this entire block into your SSH session:
+
+```bash
+sudo apt-get update && \
+sudo apt-get upgrade -y && \
+sudo apt-get install -y xfce4 xfce4-goodies xrdp xrdp-pulseaudio-installer && \
+sudo addgroup xrdp ssl-cert && \
+sudo bash -c 'cat > /etc/xrdp/startwm.sh << "EOF"
+#!/bin/sh
+unset DBUS_SESSION_BUS_ADDRESS
+unset XDG_RUNTIME_DIR
+test -f /etc/profile && . /etc/profile
+test -f $HOME/.profile && . $HOME/.profile
+exec startxfce4
+EOF' && \
+sudo chmod +x /etc/xrdp/startwm.sh && \
+sudo systemctl enable xrdp && \
+sudo systemctl restart xrdp && \
+echo "RDP setup complete! Connect using: mstsc /v:$(hostname -I | awk '{print $1}')"
+```
+
+### Script-Based Setup
+
+Alternatively, use the automated setup script:
+
+```bash
+# Copy setup-rdp.sh to your Raspberry Pi, then:
+chmod +x setup-rdp.sh
+./setup-rdp.sh
+```
+
+### Connect from Windows
+
+Open Remote Desktop Connection and connect:
 
 ```
-sudo apt-get update
-sudo apt-get install xrdp
-```
-
-Connect to raspi from your Windows Client:
-
-```
- mstsc /v:192.168.1.140
+mstsc /v:192.168.0.143
 ```
 
 ![rdp-logon](_images/rdp-logon.png)
 
-> Note: Logon using your credentials
+> Note: Login with your Raspberry Pi credentials (username: alex)
 
 ![rdp-finish](_images/rdp-finish.png)
+
+> For detailed configuration, troubleshooting, and security considerations, see [base-config.md](base-config.md)
+
+## Add Additional RDP Users
+
+Use the script to add more users who can connect via RDP:
+
+```bash
+chmod +x add-rdp-user.sh
+./add-rdp-user.sh username password
+```
+
+Example:
+
+```bash
+./add-rdp-user.sh david coolman
+```
+
+## Remote Access (Port Forwarding)
+
+To access your Raspberry Pi from outside your local network:
+
+**Router Configuration:**
+
+- External Port: 33389 (custom for security)
+- Internal IP: Your Raspberry Pi's IP (e.g., 192.168.0.143 or 192.168.0.235)
+- Internal Port: 3389
+- Protocol: TCP
+
+**Connect from outside:**
+
+```
+mstsc /v:your-public-ip:33389
+```
+
+⚠️ **Security Warning**: Use strong passwords and consider VPN for production environments.
 
 ## Optional - IP Address Management
 
